@@ -90,7 +90,7 @@
           </Menu>
         </Sider>
         <Layout :style="{padding: '0 24px 24px'}">
-          <Breadcrumb :style="{margin: '24px 0'}">
+          <!--<Breadcrumb :style="{margin: '24px 0'}">
             <template>
               <Button type="info" @click="modalAddUser = true">新增</Button>
               <Button type="success" @click="updateuser">修改</Button>
@@ -104,10 +104,11 @@
               class-name="vertical-center-modal">
               <addUser v-on:childerChanged="parentAddUser" ></addUser>
             </Modal>
-          </template>
+          </template>-->
           <Content :style="{padding: '24px', minHeight: '280px', background: '#fff'}">
             <template>
-              <Table stripe border ref="selection" :columns="columns5" :data="dataResult"></Table>
+              <listuser></listuser>
+              <!--<Table stripe border ref="selection" :columns="columns5" :data="dataResult"></Table>-->
             </template>
           </Content>
         </Layout>
@@ -116,10 +117,10 @@
   </div>
 </template>
 <script>
-  import addUser from '@/views/user/adduser.vue';
+  import listuser from '@/views/user/listuser.vue';
   export default {
     name: 'homestage',
-    components: {addUser},
+    components: {listuser},
     data() {
       return {
         modalAddUser:false,
@@ -188,15 +189,25 @@
         var userlistData = this.$refs.selection.getSelection();
         var userPush = new Array();
         userlistData.forEach(user =>{
-          userPush.push(user.userId)
+          let idmap = new Object();
+          idmap.id = user.userId;
+          userPush.push(idmap)
         });
         this.$axios({
           url: '/sys/user/deleetListUser',//请求的地址
+          headers : {"Content-Type" : "application/json;charset=utf-8"},
           method: 'post',//请求的方式
           data: JSON.stringify(userPush)
         }).then(res => {
+          if (res.data.code == 200) {
+            this.$Message.success("删除成功");
+            this.listUser();
+          } else if (res.data.code == 500) {
+            this.$Message.error(res.data.msg);
+          }
 
         }).catch(err => {
+
         });
       }
     }
