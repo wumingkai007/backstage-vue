@@ -68,6 +68,36 @@
         }).catch(function (err) {
 
         })
+      },parentAddUser(){
+        this.modalAddUser = false;
+        this.listUser();
+      },
+      updateuser(){
+
+      },deleteuser(){
+        var userlistData = this.$refs.selection.getSelection();
+        var userPush = new Array();
+        userlistData.forEach(user =>{
+          let idmap = new Object();
+          idmap.id = user.userId;
+          userPush.push(idmap)
+        });
+        this.$axios({
+          url: '/sys/user/deleetListUser',//请求的地址
+          headers : {"Content-Type" : "application/json;charset=utf-8"},
+          method: 'post',//请求的方式
+          data: JSON.stringify(userPush)
+        }).then(res => {
+          if (res.data.code == 200) {
+            this.$Message.success("删除成功");
+            this.listUser();
+          } else if (res.data.code == 500) {
+            this.$Message.error(res.data.msg);
+          }
+
+        }).catch(err => {
+
+        });
       }
     }
   }

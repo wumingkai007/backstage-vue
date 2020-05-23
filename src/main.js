@@ -22,6 +22,27 @@ axios.interceptors.request.use(
     return Promise.reject(error);
   }
 );
+// http响应拦截器
+axios.interceptors.response.use(response => {
+  if(response.headers.newtoken){
+    localStorage.setItem("jwtToken",response.headers.newtoken);
+  }
+  return response
+}, error => {
+  return Promise.reject(error)
+});
+//登录拦截，路由守卫
+router.beforeEach((to, from, next) => {
+  if(to.path == '/login'){
+    next();
+  }else{
+    if(localStorage.getItem("jwtToken")){
+      next();
+    }else{
+      next({path:'/login'});
+    }
+  }
+});
 new Vue({
   el: '#app',
   router,

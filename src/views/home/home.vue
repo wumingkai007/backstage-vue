@@ -40,21 +40,10 @@
         <Menu mode="horizontal" theme="dark" active-name="1">
           <div class="layout-logo"></div>
           <div class="layout-nav">
-            <Menu-item name="1">
-              <Icon type="ios-navigate"></Icon>
-              Item 1
-            </Menu-item>
-            <Menu-item name="2">
-              <Icon type="ios-keypad"></Icon>
-              Item 2
-            </Menu-item>
-            <Menu-item name="3">
-              <Icon type="ios-analytics"></Icon>
-              Item 3
-            </Menu-item>
-            <Menu-item name="4">
+
+            <Menu-item  name="4">
               <Icon type="ios-paper"></Icon>
-              Item 4
+              <span @click="modal1 = true">退出</span>
             </Menu-item>
           </div>
         </Menu>
@@ -114,101 +103,33 @@
         </Layout>
       </Layout>
     </Layout>
+    <Modal
+      v-model="modal1"
+      @on-ok="ok"
+      @on-cancel="cancel">
+      是否退出登录
+    </Modal>
   </div>
 </template>
 <script>
   import listuser from '@/views/user/listuser.vue';
   export default {
     name: 'homestage',
-    components: {listuser},
-    data() {
+    data () {
       return {
-        modalAddUser:false,
-        columns5: [
-          {
-            type: 'selection',
-            width: 60,
-            align: 'center'
-          },
-          {
-            title: '姓名',
-            key: 'userName',
-            resizable: true,
-            width: 180
-          },
-          {
-            title: '账号',
-            key: 'account',
-            resizable: true,
-            width: 180
-          },
-          {
-            title: '年龄',
-            key: 'age',
-            resizable: true,
-            width: 180
-          },
-          {
-            title: '性别',
-            key: 'gender'
-          },
-          {
-            title: '账号状态',
-            key: 'userStatus'
-          }
-        ],
-        dataResult: []
+        modal1: false
       }
     },
-    created: function () {
-      this.listUser();
-    },
+    components: {listuser},
     methods: {
       selectMenu(datakey) {
 
+      },ok () {
+        localStorage.removeItem("jwtToken");
+        this.$router.push({ path: '/login' });
       },
-      parentAddUser(){
-        this.modalAddUser = false;
-        this.listUser();
-      },
-      listUser(){
-        this.$axios.get('/sys/user/selectListUser').then(res =>{
-          if (res.data.code == 200) {
-            var dataResult = res.data.data;
-            this.dataResult = dataResult;
-          } else if (res.data.code == 500) {
-            this.$Message.error(res.data.msg);
-          }
-        }).catch(function (err) {
+      cancel () {
 
-        })
-      },
-      updateuser(){
-
-      },deleteuser(){
-        var userlistData = this.$refs.selection.getSelection();
-        var userPush = new Array();
-        userlistData.forEach(user =>{
-          let idmap = new Object();
-          idmap.id = user.userId;
-          userPush.push(idmap)
-        });
-        this.$axios({
-          url: '/sys/user/deleetListUser',//请求的地址
-          headers : {"Content-Type" : "application/json;charset=utf-8"},
-          method: 'post',//请求的方式
-          data: JSON.stringify(userPush)
-        }).then(res => {
-          if (res.data.code == 200) {
-            this.$Message.success("删除成功");
-            this.listUser();
-          } else if (res.data.code == 500) {
-            this.$Message.error(res.data.msg);
-          }
-
-        }).catch(err => {
-
-        });
       }
     }
   }
