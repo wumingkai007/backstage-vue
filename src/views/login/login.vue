@@ -41,6 +41,12 @@
         }
       }
     },
+    beforeCreate:function(){
+      document.body.className = "logintemp"
+    },
+    beforeDestroy: function() {
+      document.body.removeAttribute("class","logintemp");
+    },
     methods: {
       handleSubmit (loginData) {
         this.$refs[loginData].validate((valid) => {
