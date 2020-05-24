@@ -1,21 +1,28 @@
+
 <template>
-  <Button>Default</Button>
-  <Button type="primary">Primary</Button>
-  <Button type="dashed">Dashed</Button>
-  <Button type="text">Text</Button>
-  <br><br>
-  <Button type="info">Info</Button>
-  <Button type="success">Success</Button>
-  <Button type="warning">Warning</Button>
-  <Button type="error">Error</Button>
-</template>
-<template>
-  <Table stripe border ref="selection" :columns="columns5" :data="dataResult"></Table>
+  <div>
+    <template>
+      <Button type="info" @click="modalAddUser = true">新增</Button>
+      <Button type="success" @click="updateuser">修改</Button>
+      <Button type="warning" @click="deleteuser">删除</Button>
+      <template>
+        <Modal
+          title="新增"
+          v-model="modalAddUser" footer-hide="true"
+          class-name="vertical-center-modal">
+          <addUser v-on:childerChanged="parentAddUser" ></addUser>
+        </Modal>
+      </template>
+    </template>
+    <Table stripe border ref="selection" :columns="columns5" :data="dataResult"></Table>
+  </div>
 </template>
 
 <script>
+  import addUser from '@/views/user/adduser.vue';
   export default {
     name: "listuser",
+    components: {addUser},
     data() {
       return {
         modalAddUser: false,
