@@ -52,7 +52,7 @@
         this.$refs[loginData].validate((valid) => {
           if (valid) {
             this.$axios({
-              url: '/login/verify',//请求的地址
+              url: '/api/login/verify',//请求的地址
               method: 'post',//请求的方式
               data: this.loginData
             }).then(res => {

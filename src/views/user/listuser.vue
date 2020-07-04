@@ -65,7 +65,7 @@
       this.listUser();
     },methods:{
       listUser(){
-        this.$axios.get('/sys/user/selectListUser').then(res =>{
+        this.$axios.get('/api/sys/user/selectListUser').then(res =>{
           if (res.data.code == 200) {
             var dataResult = res.data.data;
             this.dataResult = dataResult;
@@ -90,7 +90,7 @@
           userPush.push(idmap)
         });
         this.$axios({
-          url: '/sys/user/deleetListUser',//请求的地址
+          url: '/api/sys/user/deleetListUser',//请求的地址
           headers : {"Content-Type" : "application/json;charset=utf-8"},
           method: 'post',//请求的方式
           data: JSON.stringify(userPush)
